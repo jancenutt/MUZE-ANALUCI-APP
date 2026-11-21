@@ -22,7 +22,7 @@ export class MfaError extends Error {
 
 function authPath(suffix) {
   if (!/^[a-f0-9]{24}$/i.test(appParams.appId)) throw new Error('Invalid app ID');
-  return `/api/apps/${appParams.appId}/auth/${suffix}`;
+  return `${appParams.apiBaseUrl}/api/apps/${appParams.appId}/auth/${suffix}`;
 }
 
 async function request(suffix, { method = 'POST', body, token, headers } = {}) {
@@ -97,7 +97,7 @@ const isInAppBrowser = () => /LinkedIn|Twitter/i.test(navigator.userAgent);
 
 // The app's sign-in settings: auth_config holds mfa_policy and the enabled sign-in methods.
 export async function loadSignInOptions() {
-  const response = await fetch(`/api/apps/public/login-info/by-id/${appParams.appId}`);
+  const response = await fetch(`${appParams.apiBaseUrl}/api/apps/public/login-info/by-id/${appParams.appId}`);
   if (!response.ok) throw new Error('Unable to load sign-in options');
   return response.json();
 }
@@ -124,7 +124,7 @@ export async function signInWithProvider(provider, returnTo, { manage = false } 
   const path = provider === 'sso'
     ? (workspaceSso ? `/api/apps/${info.organization_id}/${appParams.appId}/auth/sso/login` : `/api/apps/${appParams.appId}/auth/sso/login`)
     : `/api/apps/auth${provider === 'google' ? '' : `/${provider}`}/login`;
-  const url = new URL(path, window.location.origin);
+  const url = new URL(path, appParams.apiBaseUrl);
   url.search = new URLSearchParams({
     from_url: new URL(returnTo, window.location.origin).href,
     ...(workspaceSso ? {} : { app_id: appParams.appId }),

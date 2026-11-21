@@ -3,7 +3,7 @@ import { base44 } from '@/api/base44Client';
 
 function authPath(suffix) {
   if (!/^[a-f0-9]{24}$/i.test(appParams.appId)) throw new Error('Invalid app ID');
-  return `/api/apps/${appParams.appId}/auth/${suffix}`;
+  return `${appParams.apiBaseUrl}/api/apps/${appParams.appId}/auth/${suffix}`;
 }
 
 async function post(suffix, body, token) {
@@ -37,7 +37,7 @@ export async function continueMfa(result, returnTo) {
 
 // provider: 'google' | 'microsoft' | 'facebook' | 'apple'
 export async function loginWithSocial(provider, returnTo) {
-  const response = await fetch(`/api/apps/public/login-info/by-id/${appParams.appId}`);
+  const response = await fetch(`${appParams.apiBaseUrl}/api/apps/public/login-info/by-id/${appParams.appId}`);
   if (!response.ok) throw new Error('Unable to load sign-in options');
   const info = await response.json();
   if (info.auth_config?.mfa_policy !== 'required') return base44.auth.loginWithProvider(provider, returnTo);

@@ -19,6 +19,9 @@ const getAppParams = () => {
 		token: getAccessToken(),
 		functionsVersion: (!isNode && new URLSearchParams(window.location.search).get("functions_version")?.trim()) || import.meta.env.VITE_BASE44_FUNCTIONS_VERSION,
 		appBaseUrl: import.meta.env.VITE_BASE44_APP_BASE_URL,
+		// Base44 platform API origin. The app is hosted outside Base44 now, so
+		// relative /api paths would hit this host instead of Base44.
+		apiBaseUrl: 'https://base44.app',
 	}
 }
 

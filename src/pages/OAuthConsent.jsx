@@ -107,7 +107,7 @@ export default function OAuthConsent() {
         const infoHeaders = {};
         if (appParams.token) infoHeaders.Authorization = "Bearer " + appParams.token;
         const res = await fetch(
-          `/api/apps/${appParams.appId}/mcp/consent-info?handle=${encodeURIComponent(ctx)}`,
+          `${appParams.apiBaseUrl}/api/apps/${appParams.appId}/mcp/consent-info?handle=${encodeURIComponent(ctx)}`,
           { credentials: "include", headers: infoHeaders },
         );
         if (!res.ok) {
@@ -157,7 +157,7 @@ export default function OAuthConsent() {
       // Cookie-backed sessions carry no token; sending "Bearer null" would
       // shadow the valid cookie, so add the header only when a token exists.
       if (appParams.token) headers.Authorization = "Bearer " + appParams.token;
-      const res = await fetch(`/api/apps/${appParams.appId}/mcp/authorize-grant`, {
+      const res = await fetch(`${appParams.apiBaseUrl}/api/apps/${appParams.appId}/mcp/authorize-grant`, {
         method: "POST",
         credentials: "include",
         headers,

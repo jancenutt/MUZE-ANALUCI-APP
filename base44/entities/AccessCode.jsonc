@@ -1,0 +1,63 @@
+{
+  "name": "AccessCode",
+  "type": "object",
+  "properties": {
+    "code": {
+      "type": "string",
+      "description": "Redeemed at checkout. Stored uppercase."
+    },
+    "label": {
+      "type": "string"
+    },
+    "productId": {
+      "type": "string"
+    },
+    "productName": {
+      "type": "string"
+    },
+    "active": {
+      "type": "boolean",
+      "default": true
+    },
+    "maxUses": {
+      "type": "number",
+      "default": 1
+    },
+    "uses": {
+      "type": "number",
+      "default": 0
+    },
+    "expires_at": {
+      "type": "string",
+      "format": "date"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "code"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

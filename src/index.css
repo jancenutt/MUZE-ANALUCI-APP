@@ -1,0 +1,240 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 224 44% 4%;
+    --foreground: 40 22% 92%;
+    --card: 222 36% 8%;
+    --card-foreground: 40 22% 92%;
+    --popover: 222 38% 7%;
+    --popover-foreground: 40 22% 92%;
+    --primary: 35 100% 64%;
+    --primary-foreground: 224 44% 4%;
+    --secondary: 222 26% 13%;
+    --secondary-foreground: 40 22% 92%;
+    --muted: 222 24% 11%;
+    --muted-foreground: 220 12% 60%;
+    --accent: 35 45% 15%;
+    --accent-foreground: 35 100% 80%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 222 20% 16%;
+    --input: 222 20% 16%;
+    --ring: 35 100% 64%;
+    --radius: 0.25rem;
+    --font-heading: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
+    --font-body: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
+    --font-display: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
+    --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+    --chart-1: 35 100% 64%;
+    --chart-2: 199 85% 60%;
+    --chart-3: 145 60% 45%;
+    --chart-4: 45 90% 55%;
+    --chart-5: 12 80% 58%;
+    --sidebar-background: 224 44% 5%;
+    --sidebar-foreground: 40 22% 92%;
+    --sidebar-primary: 35 100% 64%;
+    --sidebar-primary-foreground: 224 44% 4%;
+    --sidebar-accent: 222 26% 13%;
+    --sidebar-accent-foreground: 40 22% 92%;
+    --sidebar-border: 222 20% 16%;
+    --sidebar-ring: 35 100% 64%;
+  }
+
+  .dark {
+    --background: 224 44% 4%;
+    --foreground: 40 22% 92%;
+    --card: 222 36% 8%;
+    --card-foreground: 40 22% 92%;
+    --popover: 222 38% 7%;
+    --popover-foreground: 40 22% 92%;
+    --primary: 35 100% 64%;
+    --primary-foreground: 224 44% 4%;
+    --secondary: 222 26% 13%;
+    --secondary-foreground: 40 22% 92%;
+    --muted: 222 24% 11%;
+    --muted-foreground: 220 12% 60%;
+    --accent: 35 45% 15%;
+    --accent-foreground: 35 100% 80%;
+    --border: 222 20% 16%;
+    --input: 222 20% 16%;
+    --ring: 35 100% 64%;
+  }
+}
+
+/* System light preference. Dark stays the app's default look; this block only follows the
+   device setting, so every token stays a token and no page is hardcoded to a colour. */
+@media (prefers-color-scheme: light) {
+  :root {
+    color-scheme: light;
+    --background: 40 30% 97%;
+    --foreground: 224 32% 10%;
+    --card: 0 0% 100%;
+    --card-foreground: 224 32% 10%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 224 32% 10%;
+    --primary: 32 92% 42%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 40 20% 92%;
+    --secondary-foreground: 224 32% 12%;
+    --muted: 40 18% 93%;
+    --muted-foreground: 224 12% 40%;
+    --accent: 36 88% 90%;
+    --accent-foreground: 30 78% 24%;
+    --destructive: 0 72% 45%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 40 14% 84%;
+    --input: 40 14% 84%;
+    --ring: 32 92% 46%;
+    --chart-1: 32 92% 46%;
+    --chart-2: 199 85% 40%;
+    --chart-3: 145 60% 34%;
+    --chart-4: 45 90% 40%;
+    --chart-5: 12 80% 44%;
+    --sidebar-background: 40 26% 95%;
+    --sidebar-foreground: 224 32% 12%;
+    --sidebar-primary: 32 92% 42%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 40 20% 90%;
+    --sidebar-accent-foreground: 224 32% 14%;
+    --sidebar-border: 40 14% 84%;
+    --sidebar-ring: 32 92% 46%;
+  }
+}
+
+@layer base {
+  html {
+    color-scheme: dark;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: none;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-body antialiased;
+    overscroll-behavior: none;
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+    background-image:
+      radial-gradient(1200px 600px at 50% -10%, hsl(35 100% 64% / 0.07), transparent 70%),
+      radial-gradient(800px 500px at 100% 100%, hsl(199 85% 60% / 0.05), transparent 70%);
+  }
+
+  ::selection {
+    background: hsl(var(--primary) / 0.28);
+    color: hsl(var(--foreground));
+  }
+
+  /* Text stays selectable wherever it is the content: track titles, legal copy,
+     chat replies, articles and every field the member types into. */
+  input,
+  textarea,
+  select,
+  [contenteditable="true"],
+  .selectable {
+    -webkit-user-select: text;
+    user-select: text;
+    -webkit-touch-callout: default;
+  }
+}
+
+@layer utilities {
+  .hud-panel {
+    border: 1px solid hsl(var(--primary) / 0.14);
+    background: linear-gradient(160deg, hsl(var(--card) / 0.94), hsl(var(--background) / 0.82));
+  }
+
+  .hud-glow {
+    box-shadow:
+      0 0 0 1px hsl(var(--primary) / 0.05),
+      0 30px 90px -50px hsl(var(--primary) / 0.5);
+  }
+
+  .amber-glow {
+    text-shadow: 0 0 34px hsl(var(--primary) / 0.4);
+  }
+
+  .grid-lines {
+    background-image:
+      linear-gradient(hsl(var(--primary) / 0.07) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(var(--primary) / 0.07) 1px, transparent 1px);
+    background-size: 64px 64px;
+  }
+
+  .scanlines {
+    background-image: repeating-linear-gradient(
+      0deg,
+      hsl(0 0% 0% / 0.32) 0px,
+      hsl(0 0% 0% / 0.32) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+  }
+
+  /* Mobile shell: notch, home indicator and the fixed bars that sit in them. */
+  .safe-top {
+    padding-top: env(safe-area-inset-top);
+  }
+
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  /* Player bar rides above the tab bar on phones, and returns to the edge on desktop. */
+  .above-tabs {
+    bottom: 0;
+  }
+
+  @media (max-width: 767px) {
+    .above-tabs {
+      bottom: calc(3.5rem + env(safe-area-inset-bottom));
+    }
+  }
+
+  /* Page padding for the fixed bottom bars, so nothing hides under them. */
+  .pad-tabs {
+    padding-bottom: calc(4.5rem + env(safe-area-inset-bottom));
+  }
+
+  .pad-tabs-player {
+    padding-bottom: calc(9rem + env(safe-area-inset-bottom));
+  }
+
+  @media (min-width: 768px) {
+    .pad-tabs {
+      padding-bottom: 0;
+    }
+
+    .pad-tabs-player {
+      padding-bottom: 7rem;
+    }
+  }
+
+  .no-scrollbar {
+    scrollbar-width: none;
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .hairline {
+    border-top: 1px solid hsl(var(--primary) / 0.12);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

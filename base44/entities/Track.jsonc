@@ -1,0 +1,69 @@
+{
+  "name": "Track",
+  "type": "object",
+  "properties": {
+    "release_id": {
+      "type": "string"
+    },
+    "release_num": {
+      "type": "number"
+    },
+    "release_title": {
+      "type": "string"
+    },
+    "no": {
+      "type": "number"
+    },
+    "title": {
+      "type": "string"
+    },
+    "artist": {
+      "type": "string"
+    },
+    "duration": {
+      "type": "string"
+    },
+    "cover_url": {
+      "type": "string"
+    },
+    "audio_uri": {
+      "type": "string"
+    },
+    "has_audio": {
+      "type": "boolean"
+    },
+    "is_demo": {
+      "type": "boolean"
+    },
+    "video_uri": {
+      "type": "string",
+      "description": "Private storage reference for the music video. Owner-only until published."
+    },
+    "video_public": {
+      "type": "boolean",
+      "default": false,
+      "description": "Owner flips this when the video is ready to appear on the public side."
+    }
+  },
+  "required": [
+    "title"
+  ],
+  "rls": {
+    "read": {},
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

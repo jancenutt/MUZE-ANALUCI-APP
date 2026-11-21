@@ -1,0 +1,114 @@
+{
+  "name": "Release",
+  "type": "object",
+  "properties": {
+    "num": {
+      "type": "number"
+    },
+    "slug": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "Album",
+        "EP",
+        "Single",
+        "Mixtape",
+        "Film",
+        "Book",
+        "Artwork",
+        "Not shown"
+      ],
+      "enumColors": [
+        "blue",
+        "purple",
+        "green",
+        "pink",
+        "yellow",
+        "orange",
+        "red",
+        "gray"
+      ]
+    },
+    "artist": {
+      "type": "string"
+    },
+    "date": {
+      "type": "string"
+    },
+    "year": {
+      "type": "number"
+    },
+    "upc": {
+      "type": "string"
+    },
+    "release_id": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string"
+    },
+    "activity": {
+      "type": "string"
+    },
+    "cover_url": {
+      "type": "string"
+    },
+    "track_count": {
+      "type": "number"
+    },
+    "content_type": {
+      "type": "string",
+      "enum": [
+        "audio",
+        "video",
+        "image",
+        "document",
+        "mixed"
+      ],
+      "enumColors": [
+        "green",
+        "blue",
+        "purple",
+        "yellow",
+        "gray"
+      ],
+      "default": "audio",
+      "description": "What this release delivers: music, film/video, artwork, or a written work. Drives the archive and the email drop."
+    },
+    "release_month": {
+      "type": "string",
+      "description": "Drop month in YYYY-MM. Auto-filled from the release date; editable in the archive console. Members who paid for this month own this drop."
+    },
+    "drop_uri": {
+      "type": "string",
+      "description": "Private storage reference for the drop package that gets emailed to entitled members. Never served from the site."
+    }
+  },
+  "required": [
+    "num",
+    "title"
+  ],
+  "rls": {
+    "read": {},
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

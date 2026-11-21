@@ -1,0 +1,44 @@
+{
+  "definition": {
+    "document": {
+      "dsl": "1.0.0",
+      "name": "notion_catalog_sync",
+      "version": "1.0",
+      "namespace": "base44"
+    },
+    "do": [
+      {
+        "sync_catalog": {
+          "call": "invoke_backend_function",
+          "with": {
+            "function_name": "notionLibrary",
+            "args": {
+              "dryRun": false,
+              "trigger": "${ .trigger.event_type }",
+              "page_id": "${ .trigger.data.entity.id }"
+            }
+          },
+          "then": "end",
+          "x-base44": {
+            "title": "Sync Notion into archive",
+            "description": "Reconcile releases and tracks"
+          }
+        }
+      }
+    ]
+  },
+  "name": "Notion Catalog Sync",
+  "trigger": {
+    "condition": "${ .trigger.data.entity.type == \"page\" and (.trigger.data.data.parent.id == \"412fe33b-8091-8036-a8dd-e967693be267\" or .trigger.data.data.parent.id == \"412fe33b-8091-8062-a42e-ca07ee40a4c9\") }",
+    "config": {
+      "trigger_type": "connector",
+      "events": [
+        "page.created",
+        "page.properties_updated"
+      ],
+      "integration_type": "notion",
+      "resource_id": null
+    }
+  },
+  "description": "Runs the catalog reconcile the moment a release or track row is added or edited in the Notion Releases/Tracks databases, so the archive updates without opening the app."
+}

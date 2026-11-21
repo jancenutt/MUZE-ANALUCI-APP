@@ -1,0 +1,60 @@
+{
+  "name": "TermsAcceptance",
+  "type": "object",
+  "properties": {
+    "email": {
+      "type": "string",
+      "description": "Account email the acceptance is recorded against."
+    },
+    "terms_version": {
+      "type": "string",
+      "description": "Version of the Membership Terms accepted, e.g. 1.0."
+    },
+    "terms_effective_date": {
+      "type": "string",
+      "description": "Effective date of the accepted version."
+    },
+    "source": {
+      "type": "string",
+      "enum": [
+        "signup",
+        "checkout",
+        "account"
+      ],
+      "enumColors": [
+        "green",
+        "blue",
+        "gray"
+      ],
+      "default": "signup"
+    },
+    "accepted_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the member ticked the agreement box."
+    }
+  },
+  "required": [
+    "terms_version"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {
+      "created_by_id": "{{user.id}}"
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

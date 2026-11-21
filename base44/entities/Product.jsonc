@@ -1,0 +1,84 @@
+{
+  "name": "Product",
+  "type": "object",
+  "properties": {
+    "key": {
+      "type": "string",
+      "description": "Checkout product id, e.g. stream_monthly. Never change it after launch."
+    },
+    "name": {
+      "type": "string"
+    },
+    "blurb": {
+      "type": "string"
+    },
+    "price": {
+      "type": "string",
+      "description": "Major units, e.g. 16.99"
+    },
+    "currency": {
+      "type": "string",
+      "default": "USD"
+    },
+    "interval": {
+      "type": "string",
+      "enum": [
+        "WEEK",
+        "MONTH",
+        "YEAR",
+        "ONE_TIME"
+      ],
+      "enumColors": [
+        "green",
+        "blue",
+        "purple",
+        "gray"
+      ],
+      "default": "MONTH"
+    },
+    "tier": {
+      "type": "string",
+      "enum": [
+        "stream",
+        "full",
+        "lifetime"
+      ],
+      "enumColors": [
+        "green",
+        "purple",
+        "yellow"
+      ],
+      "default": "stream"
+    },
+    "sort": {
+      "type": "number"
+    },
+    "active": {
+      "type": "boolean",
+      "default": true
+    }
+  },
+  "required": [
+    "key",
+    "name",
+    "price"
+  ],
+  "rls": {
+    "read": {},
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

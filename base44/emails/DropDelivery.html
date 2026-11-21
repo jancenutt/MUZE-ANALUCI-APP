@@ -1,0 +1,71 @@
+<mjml>
+  <mj-head>
+    <mj-title>Your drop is ready: {{drop_title}}</mj-title>
+    <mj-preview>{{drop_title}} is yours. This email is the delivery.</mj-preview>
+    <mj-attributes>
+      <mj-all font-family="'Space Grotesk', Arial, sans-serif" />
+      <mj-section background-color="#06080f" padding="0 36px" />
+      <mj-text color="#efece6" font-size="15px" line-height="1.6" padding="0" />
+      <mj-button background-color="#ffb247" color="#06080f" border-radius="0px" font-weight="700" inner-padding="14px 28px" align="left" />
+    </mj-attributes>
+  </mj-head>
+  <mj-body background-color="#06080f" width="600px">
+    <mj-section padding="32px 36px 8px">
+      <mj-column>
+        <mj-image src="https://media.base44.com/images/public/6af02847fb25ac28f99a2cf9/fdd495941_logo.png" alt="ANA.LUCI" width="44px" align="left" padding="0 0 10px 0" />
+        <mj-text font-size="12px" letter-spacing="4px" color="#8d95a5" padding="0">ANA.LUCI</mj-text>
+      </mj-column>
+    </mj-section>
+
+    <mj-section padding="20px 36px 0">
+      <mj-column>
+        <mj-text font-size="30px" line-height="1.2" color="#efece6" padding="0">
+          Your drop is ready, {{first_name}}.
+        </mj-text>
+        <mj-text font-size="15px" color="#8d95a5" padding="14px 0 0 0">
+          {{drop_title}} ({{release_month}}) is in your library. This email is the delivery.
+        </mj-text>
+      </mj-column>
+    </mj-section>
+
+    <mj-section padding="24px 36px 0">
+      <mj-column>
+        <mj-text font-size="14px" color="#efece6" padding="0">
+          {{item_count}} items in this drop: {{item_lines}}
+        </mj-text>
+      </mj-column>
+    </mj-section>
+
+    <mj-section padding="24px 36px 0">
+      <mj-column>
+        <mj-button href="{{delivery_url}}" align="left" font-size="12px" letter-spacing="2px">
+          OPEN YOUR DOWNLOAD
+        </mj-button>
+        <mj-text font-size="12px" color="#8d95a5" padding="16px 0 0 0">
+          The link is secure and time limited, and it expires in {{expiry_note}}. Resend this drop to your email any time from your library at anaLuci.app.
+        </mj-text>
+      </mj-column>
+    </mj-section>
+
+    <mj-section padding="28px 36px 40px">
+      <mj-column>
+        <mj-divider border-color="#1c2331" padding="0 0 20px 0" />
+        <mj-text font-size="11px" color="#8d95a5" line-height="1.7" padding="0">
+          Files arrive by email. The site streams only. Ownership of the work does not include the right to reuse, redistribute, or commercially exploit it, unless you hold the 100K Club.
+        </mj-text>
+        <mj-text font-size="11px" color="#8d95a5" line-height="1.7" padding="14px 0 0 0">
+          Your agreements travel with every drop:
+          <a href="https://analuci.app/terms-of-use" style="color: #ffb247; text-decoration: none;">Website Terms of Use</a> ·
+          <a href="https://analuci.app/terms" style="color: #ffb247; text-decoration: none;">Membership Terms &amp; License Agreement</a> ·
+          <a href="https://analuci.app/privacy" style="color: #ffb247; text-decoration: none;">Privacy Policy</a>
+        </mj-text>
+        <mj-text font-size="11px" color="#8d95a5" padding="10px 0 0 0">
+          Internet access is required. Mobile-carrier data rates and internet-service charges may apply.
+        </mj-text>
+        <mj-text font-size="11px" color="#8d95a5" padding="14px 0 0 0">
+          ANA.LUCI · analuci.app
+        </mj-text>
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>

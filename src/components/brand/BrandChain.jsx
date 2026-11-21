@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { ArrowUpRight } from "lucide-react";
 import MicroLabel from "@/components/MicroLabel";
 import { CHAIN } from "@/lib/brand";
+import useIsAdmin from "@/hooks/useIsAdmin";
 
 function ChainLink({ link }) {
   const className =
@@ -21,6 +22,7 @@ function ChainLink({ link }) {
 }
 
 export default function BrandChain() {
+  const isAdmin = useIsAdmin();
   return (
     <section>
       <MicroLabel>The connection</MicroLabel>
@@ -38,7 +40,9 @@ export default function BrandChain() {
               {node.role}
             </p>
             <p className="mt-4 flex-1 text-xs leading-relaxed text-foreground/60">{node.body}</p>
-            <ChainLink link={node.link} />
+            {node.link.to === "/membership" && !isAdmin ? null : (
+              <ChainLink link={node.link} />
+            )}
           </article>
         ))}
       </div>

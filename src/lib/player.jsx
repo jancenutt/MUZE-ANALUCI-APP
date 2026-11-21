@@ -57,11 +57,11 @@ export function PlayerProvider({ children }) {
     async (track, list, index) => {
       if (!track) return;
       const audio = audioRef.current;
-      // A track is cut to a snippet only when the server confirmed this member has no
-      // membership. Everything else — beta tester, paying member, admin, or a browser that
-      // blocked the answer — plays the full master.
+      // This copy of the app is the open archive: everyone hears the full master.
+      // The snippet window below stays in the code but is never armed, because
+      // entitlement.restricted is always false here — membership still exists for
+      // the admin, it just never trims playback.
       const entitled = !entitlement.restricted;
-      // Non-members hear a random 30-second snippet of the master, then the paywall.
       previewRangeRef.current = null;
       setPreviewRange(null);
       pendingPreviewRef.current = !entitled;

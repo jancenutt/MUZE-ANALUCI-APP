@@ -4,11 +4,13 @@ import { Loader2, Mail, Send, ShieldCheck } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import MicroLabel from "@/components/MicroLabel";
 import useEntitlement from "@/hooks/useEntitlement";
+import useIsAdmin from "@/hooks/useIsAdmin";
 
 // Files never come from this site: every button here asks the server to email the drop to
 // the member's signup address. `send-drop` re-checks the membership before it sends.
 export default function LibraryPanel() {
   const { hasDrops, hasFullLibrary, hasOwnership, isBeta } = useEntitlement();
+  const isAdmin = useIsAdmin();
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState("");
@@ -118,8 +120,10 @@ export default function LibraryPanel() {
         <p className="mt-3 text-xs leading-relaxed text-foreground/55">
           {hasDrops
             ? "No drops have landed yet. Every drop in a month you pay for appears here, and can be re-sent by email forever."
-            : "Drops start at the Enthusiast Club. Interested Party memberships stream only. "}
-          {!hasDrops ? (
+            : isAdmin
+              ? "Drops start at the Enthusiast Club. Interested Party memberships stream only. "
+              : "No drops have landed yet."}
+          {!hasDrops && isAdmin ? (
             <Link to="/membership" className="text-amber/80 hover:text-amber">
               See memberships
             </Link>

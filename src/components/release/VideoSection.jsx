@@ -1,15 +1,15 @@
 import { useState } from "react";
-import { Loader2, Play } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Loader2, Lock, Play } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import CoverImage from "@/components/CoverImage";
 import MicroLabel from "@/components/MicroLabel";
 import useEntitlement from "@/hooks/useEntitlement";
 
-// Music videos stream in the player for everyone — this copy of the app is the
-// open archive. Videos are never served as files: the signed link is issued the
-// moment Watch is pressed and expires an hour later.
+// Music videos stream in the player for any member. Videos are never served as files:
+// the signed link is issued the moment Watch is pressed and expires an hour later.
 export default function VideoSection({ tracks, releaseCover }) {
-  const { loading } = useEntitlement();
+  const { hasAccess, loading } = useEntitlement();
   const [openId, setOpenId] = useState("");
   const [src, setSrc] = useState("");
   const [busyId, setBusyId] = useState("");
@@ -18,6 +18,7 @@ export default function VideoSection({ tracks, releaseCover }) {
   if (loading || !videos.length) return null;
 
   const watch = async (track) => {
+    if (!hasAccess) return;
     if (openId === track.id) {
       setOpenId("");
       setSrc("");
@@ -41,7 +42,7 @@ export default function VideoSection({ tracks, releaseCover }) {
       <div className="flex items-center justify-between">
         <MicroLabel>Music videos</MicroLabel>
         <span className="font-mono text-[9px] uppercase tracking-[0.18em] text-amber/60">
-          Streaming · files by email
+          {hasAccess ? "Streaming · files by email" : "Membership required"}
         </span>
       </div>
 
@@ -54,7 +55,7 @@ export default function VideoSection({ tracks, releaseCover }) {
         </div>
       ) : null}
 
-      <div className="mt-3 grid gap-2 sm:grid-cols-2">
+      <div className={`mt-3 grid gap-2 sm:grid-cols-2 ${hasAccess ? "" : "opacity-35"}`}>
         {videos.map((track) => {
           const thumb = track.cover_url || releaseCover;
           return (
@@ -71,13 +72,15 @@ export default function VideoSection({ tracks, releaseCover }) {
               <button
                 type="button"
                 onClick={() => watch(track)}
-                disabled={busyId === track.id}
+                disabled={!hasAccess || busyId === track.id}
                 className="flex shrink-0 items-center gap-1.5 rounded-sm border border-amber/30 px-2.5 py-1.5 font-mono text-[8px] uppercase tracking-[0.16em] text-amber/90 transition-colors hover:bg-amber/10 disabled:cursor-not-allowed disabled:opacity-60"
               >
                 {busyId === track.id ? (
                   <Loader2 className="h-3 w-3 animate-spin" />
-                ) : (
+                ) : hasAccess ? (
                   <Play className="h-3 w-3" fill="currentColor" />
+                ) : (
+                  <Lock className="h-3 w-3" />
                 )}
                 {openId === track.id ? "Hide" : "Watch"}
               </button>
@@ -85,6 +88,15 @@ export default function VideoSection({ tracks, releaseCover }) {
           );
         })}
       </div>
+
+      {!hasAccess ? (
+        <p className="mt-3 max-w-xl text-xs leading-relaxed text-foreground/55">
+          Any membership streams the videos in the player.{" "}
+          <Link to="/membership" className="text-amber/80 hover:text-amber">
+            See memberships
+          </Link>
+        </p>
+      ) : null}
     </section>
   );
 }

@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Archive, MessageSquare, Play } from "lucide-react";
+import { Archive, MessageSquare, KeyRound } from "lucide-react";
 import Hero from "@/components/home/Hero";
 import StatsStrip from "@/components/home/StatsStrip";
 import WhatsNew from "@/components/home/WhatsNew";
@@ -25,12 +25,12 @@ const HOW_IT_WORKS = [
     cta: "Ask a question",
   },
   {
-    icon: Play,
+    icon: KeyRound,
     step: "03",
-    title: "Press play, hear it all",
-    body: "Press play on anything and hear the full song, start to finish. The archive is open — no previews, no paywall.",
-    to: "/archive",
-    cta: "Open the archive",
+    title: "Unlock the masters",
+    body: "Press play for a free 30-second preview of anything. A membership — from $1.99 a week — streams the full masters and emails you the drops to keep.",
+    to: "/membership",
+    cta: "See memberships",
   },
 ];
 
@@ -71,7 +71,7 @@ export default function Home() {
   usePageMeta({
     title: "AnaLuci.app — Archive & Stream | J'ance Nutt",
     description:
-      "AnaLuci.app is the archive and on-demand streaming platform for artist J'ance Nutt — every release, track and master in one place. Browse free and stream the full archive.",
+      "AnaLuci.app is the archive and on-demand streaming platform for artist J'ance Nutt — every release, track and master in one place. Browse free, preview anything, stream with a membership.",
     path: "/",
   });
 

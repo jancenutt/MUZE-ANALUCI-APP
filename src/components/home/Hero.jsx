@@ -54,8 +54,8 @@ export default function Hero() {
           </p>
 
           <p className="mt-6 max-w-lg text-sm leading-relaxed text-foreground/70 sm:text-base">
-            Browse {catalogLine} free — no account needed. Press play on anything and
-            hear the full song. The archive is open.
+            Browse {catalogLine} free — no account needed. Press play on anything for a
+            30-second preview. Memberships from $1.99 a week unlock the full masters.
           </p>
 
           <div className="mt-10 flex w-full flex-col items-center gap-3 sm:w-auto sm:flex-row">
@@ -64,13 +64,13 @@ export default function Hero() {
               className="group flex w-full items-center justify-center gap-2 rounded-sm bg-amber px-7 py-3.5 font-mono text-[11px] uppercase tracking-[0.24em] text-primary-foreground transition-all hover:bg-amber/90 hover:shadow-[0_0_40px_-8px_hsl(35_100%_64%/0.6)] sm:w-auto"
             >
               <Play className="h-3.5 w-3.5" strokeWidth={2.5} />
-              Listen free — full songs
+              Listen free — 30s previews
             </Link>
             <Link
-              to="/ask"
+              to="/membership"
               className="group flex w-full items-center justify-center gap-2 rounded-sm border border-amber/25 px-7 py-3.5 font-mono text-[11px] uppercase tracking-[0.24em] text-amber/90 transition-colors hover:bg-amber/[0.07] sm:w-auto"
             >
-              Ask ANA.LUCI
+              Memberships from $1.99/wk
               <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
             </Link>
           </div>

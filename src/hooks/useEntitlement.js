@@ -160,10 +160,10 @@ export default function useEntitlement() {
     purchase: state.purchase,
     isAdmin: state.isAdmin,
     level,
-    // This copy of the app is the open archive: playback is never trimmed to a
-    // snippet, for anyone. Membership levels are still read and kept above — the
-    // admin-only membership pages still use them — but no listener is restricted.
-    restricted: false,
+    // Playback is trimmed to a snippet only when the server positively confirmed that this
+    // signed-in member has no membership. Anything unknown plays whole, so a stricter browser
+    // can never demote a beta tester or a paying member to a 30-second preview.
+    restricted: !state.isAdmin && state.verified === true && level < LEVEL.stream,
     hasAccess: level >= LEVEL.stream,
     hasDrops: level >= LEVEL.enthusiast,
     hasFullLibrary: level >= LEVEL.muzikclik,

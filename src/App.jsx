@@ -25,7 +25,6 @@ import ForgotPassword from '@/pages/ForgotPassword';
 import ResetPassword from '@/pages/ResetPassword';
 import Mfa from '@/pages/Mfa';
 import ProtectedRoute from '@/components/ProtectedRoute';
-import AdminOnlyRoute from '@/components/AdminOnlyRoute';
 const Playlists = lazy(() => import('@/pages/Playlists'));
 const Join = lazy(() => import('@/pages/Join'));
 const Terms = lazy(() => import('@/pages/Terms'));
@@ -71,11 +70,9 @@ const AuthenticatedApp = () => {
         <Route path="/archive" element={<Archive />} />
         <Route path="/release/:id" element={<ReleaseDetail />} />
         <Route path="/ask" element={<Ask />} />
-        <Route element={<AdminOnlyRoute />}>
-          <Route path="/membership" element={<Membership />} />
-          <Route path="/pricing" element={<Navigate to="/membership" replace />} />
-          <Route path="/join" element={<Join />} />
-        </Route>
+        <Route path="/membership" element={<Membership />} />
+        <Route path="/pricing" element={<Navigate to="/membership" replace />} />
+        <Route path="/join" element={<Join />} />
         <Route path="/terms" element={<Terms />} />
         <Route path="/terms-of-use" element={<TermsOfUse />} />
         <Route path="/privacy" element={<Privacy />} />

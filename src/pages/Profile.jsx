@@ -2,14 +2,8 @@ import MicroLabel from "@/components/MicroLabel";
 import ProfileLinks from "@/components/profile/ProfileLinks";
 import { ARTIST, BIO, DISAMBIGUATION, LINKS, SITE_LINKS } from "@/lib/profile";
 import { SITE_URL, usePageMeta } from "@/lib/seo";
-import useIsAdmin from "@/hooks/useIsAdmin";
 
 export default function Profile() {
-  const isAdmin = useIsAdmin();
-  // Membership is private to the admin in this copy — everyone else sees the open archive.
-  const siteLinks = isAdmin
-    ? SITE_LINKS
-    : SITE_LINKS.filter((link) => link.url !== "/membership");
   usePageMeta({
     title: `${ARTIST.name} — Artist Profile & Links | AnaLuci.app`,
     description: `${ARTIST.name}: ${ARTIST.role}. Founder of ${ARTIST.company}. Official links, catalog and contact.`,
@@ -89,7 +83,7 @@ export default function Profile() {
 
         <div className="space-y-8">
           <ProfileLinks title="Links" links={LINKS} />
-          <ProfileLinks title="On AnaLuci.app" links={siteLinks} internal />
+          <ProfileLinks title="On AnaLuci.app" links={SITE_LINKS} internal />
         </div>
       </div>
     </div>

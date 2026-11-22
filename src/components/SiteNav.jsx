@@ -15,10 +15,9 @@ export default function SiteNav() {
   const { pathname } = useLocation();
   const { user } = useAuth();
   const isAdmin = useIsAdmin();
-  // Membership is private to the admin in this copy — everyone else sees the open archive.
   const links = isAdmin
     ? [...LINKS, { to: "/sync", label: "Sync" }, { to: "/admin", label: "Admin" }]
-    : LINKS.filter((link) => link.to !== "/membership");
+    : LINKS;
 
   return (
     <header className="safe-top sticky top-0 z-40 border-b border-amber/10 bg-background/80 backdrop-blur-xl">

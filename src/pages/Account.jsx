@@ -154,16 +154,11 @@ export default function Account() {
               </div>
             ) : (
               <p className="mt-3 text-xs leading-relaxed text-foreground/55">
-                Nothing purchased yet.
-                {user?.role === "admin" ? (
-                  <>
-                    {" "}
-                    <Link to="/membership" className="text-amber/80 hover:text-amber">
-                      See membership levels
-                    </Link>
-                    .
-                  </>
-                ) : null}
+                Nothing purchased yet.{" "}
+                <Link to="/membership" className="text-amber/80 hover:text-amber">
+                  See membership levels
+                </Link>
+                .
               </p>
             )}
           </div>
@@ -172,27 +167,25 @@ export default function Account() {
         </div>
 
         <div className="space-y-4">
-          {user?.role === "admin" ? (
-            <div className="hud-panel rounded-sm p-5">
-              <MicroLabel>Membership</MicroLabel>
-              <p className="mt-3 font-display text-xl font-light text-foreground">
-                {hasAccess ? "Active" : "None"}
-              </p>
-              <p className="mt-2 text-xs leading-relaxed text-foreground/55">
-                {purchase?.productName
-                  ? purchase.productName
-                  : hasAccess
-                    ? "Owner access"
-                    : "A membership unlocks playback of the archive."}
-              </p>
-              <Link
-                to="/membership"
-                className="mt-4 inline-block font-mono text-[9px] uppercase tracking-[0.2em] text-amber/80 hover:text-amber"
-              >
-                Manage membership
-              </Link>
-            </div>
-          ) : null}
+          <div className="hud-panel rounded-sm p-5">
+            <MicroLabel>Membership</MicroLabel>
+            <p className="mt-3 font-display text-xl font-light text-foreground">
+              {hasAccess ? "Active" : "None"}
+            </p>
+            <p className="mt-2 text-xs leading-relaxed text-foreground/55">
+              {purchase?.productName
+                ? purchase.productName
+                : hasAccess
+                  ? "Owner access"
+                  : "A membership unlocks playback of the archive."}
+            </p>
+            <Link
+              to="/membership"
+              className="mt-4 inline-block font-mono text-[9px] uppercase tracking-[0.2em] text-amber/80 hover:text-amber"
+            >
+              Manage membership
+            </Link>
+          </div>
 
           <div className="rounded-sm border border-amber/10 p-5">
             <MicroLabel>Session</MicroLabel>

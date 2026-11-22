@@ -17,6 +17,33 @@ import { usePageMeta } from "@/lib/seo";
 const ART =
   "https://media.base44.com/images/public/user_6adbe2cf8290cc62f80be414/ee6876484_artcraft_2026-11-07-16-01-29.png";
 
+// Why checkout can fail before any payment page opens — and what to tell the buyer.
+// Base44 answers function calls with HTTP errors: a 402 means the app's monthly
+// integration credits ran out (nothing to do with the buyer or their card), and a 500
+// "Payments not configured" means Base44 Payments was never connected (or was
+// disconnected) for this app. Both are account-side, so "try again" is a dead end —
+// say what's actually wrong instead.
+const checkoutErrorMessage = (err) => {
+  const status = err?.response?.status ?? err?.status;
+  const data = err?.response?.data ?? {};
+  const reason = data?.extra_data?.reason ?? "";
+  const detail = data?.error ?? data?.detail ?? data?.message ?? "";
+  const message = err?.message ?? "";
+  if (
+    status === 402 ||
+    reason === "integration_credits_limit_reached" ||
+    /status code 402/.test(message) ||
+    /credit limit/i.test(detail) ||
+    /credit limit/i.test(message)
+  ) {
+    return "Membership checkout is paused — the app's monthly credits ran out. It opens again Dec 8.";
+  }
+  if (status === 500 && /not configured/i.test(detail)) {
+    return "Payments aren't connected yet, so checkout can't start.";
+  }
+  return "Checkout couldn't start — try again.";
+};
+
 export default function Membership() {
   usePageMeta({
     title: "Membership — Five Ways Into the Catalog | AnaLuci.app",
@@ -49,7 +76,7 @@ export default function Membership() {
       }
       setError("Checkout couldn't start — try again.");
     } catch (err) {
-      setError("Checkout couldn't start — try again.");
+      setError(checkoutErrorMessage(err));
     } finally {
       setBusy("");
     }

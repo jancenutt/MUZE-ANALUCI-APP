@@ -71,7 +71,7 @@ export default function WhatsNew() {
         </div>
 
         <p className="mt-3 font-mono text-[8px] uppercase tracking-[0.16em] text-muted-foreground/60">
-          Release news and drop announcements, straight from the archive. No third-party ads, ever.
+          Release news and drop announcements are part of your membership. No third-party ads, ever.
         </p>
       </div>
     </section>

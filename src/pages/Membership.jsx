@@ -5,7 +5,7 @@ import { Image } from "@/components/ui/image";
 import { base44 } from "@/api/base44Client";
 import MicroLabel from "@/components/MicroLabel";
 import CloseButton from "@/components/CloseButton";
-import useEntitlement from "@/hooks/useEntitlement";
+import useEntitlement, { freeArchiveActive } from "@/hooks/useEntitlement";
 import useProducts from "@/hooks/useProducts";
 import MembershipCard from "@/components/membership/MembershipCard";
 import MembershipCompare from "@/components/membership/MembershipCompare";
@@ -57,6 +57,9 @@ export default function Membership() {
   const [error, setError] = useState("");
   const products = useProducts();
   const { hasAccess, purchase, loading, refresh } = useEntitlement();
+  // Memberships can't start until Dec 8, 2026 (checkout is paused), so until then
+  // the archive streams free for everyone — say so up top.
+  const freeNow = freeArchiveActive();
 
   const startCheckout = async (productId) => {
     setBusy(productId);
@@ -119,7 +122,18 @@ export default function Membership() {
         </div>
       </div>
 
-      {!loading && hasAccess ? (
+      {freeNow ? (
+        <div className="mt-8 rounded-sm border border-amber/25 bg-amber/[0.06] px-4 py-4">
+          <MicroLabel>On the house until Dec 8</MicroLabel>
+          <p className="mt-2 max-w-3xl text-sm leading-relaxed text-foreground/75">
+            Memberships are paused until December 8, 2026 — so until then, the whole archive
+            streams free for everyone. Full songs, no previews, on the house. Pick your tier
+            below and join the moment memberships open back up.
+          </p>
+        </div>
+      ) : null}
+
+      {!loading && hasAccess && !freeNow ? (
         <div className="mt-8 flex items-center gap-3 rounded-sm border border-amber/25 bg-amber/[0.06] px-4 py-3">
           <Check className="h-3.5 w-3.5 text-amber" />
           <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-amber/85">

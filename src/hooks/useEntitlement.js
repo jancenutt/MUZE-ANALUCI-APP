@@ -5,6 +5,16 @@ import { readCachedAccess, writeCachedAccess } from "@/lib/entitlementCache";
 
 const ENTITLEMENT_EVENT = "entitlement:changed";
 
+// Free-archive window: membership checkout is paused until Dec 8, 2026 (the app's
+// monthly Base44 integration credits ran out), so until then the whole archive
+// streams free for everyone. The window ends Dec 8, 2026 at 00:00 America/Los_Angeles
+// — 08:00 UTC, since Los Angeles is on PST (UTC-8) in December. The moment that
+// instant passes, the normal membership rules below switch back on by themselves.
+const FREE_ARCHIVE_END_MS = Date.parse("2026-12-08T08:00:00.000Z");
+export function freeArchiveActive() {
+  return Date.now() < FREE_ARCHIVE_END_MS;
+}
+
 // Called right after access is granted so the player stops serving the preview snippet.
 export function refreshEntitlement() {
   window.dispatchEvent(new Event(ENTITLEMENT_EVENT));
@@ -153,7 +163,11 @@ export default function useEntitlement() {
     };
   }, [load]);
 
-  const level = state.isAdmin ? LEVEL.club100k : state.level ?? levelOf(state.purchase);
+  // While the free-archive window is open, nobody sits below the streaming tier:
+  // full songs play whole and member videos open for every visitor, member or not.
+  // Higher tiers (drops, full library, ownership) still take a real purchase.
+  const rawLevel = state.isAdmin ? LEVEL.club100k : state.level ?? levelOf(state.purchase);
+  const level = freeArchiveActive() ? Math.max(rawLevel, LEVEL.stream) : rawLevel;
 
   return {
     loading: state.loading,

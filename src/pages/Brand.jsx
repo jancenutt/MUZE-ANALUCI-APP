@@ -37,7 +37,7 @@ export default function Brand() {
           url: "https://jancenutt.com",
           worksFor: { "@id": `${SITE_URL}/#jn-muzik-clik` },
           knowsAbout: ["sound design", "audio engineering", "sonic branding", "streetwear", "hip-hop"],
-          sameAs: ["https://soundcloud.com/jancenutt", "https://jancenutt.com", "https://www.instagram.com/analuci.app/", "https://www.instagram.com/fknjancee/", "https://www.threads.net/@fknjancee", "https://www.tiktok.com/@.jancenutt"],
+          sameAs: ["https://soundcloud.com/jancenutt", "https://jancenutt.com", "https://www.instagram.com/analuci.app/", "https://www.instagram.com/fknjancee/", "https://www.threads.net/@fknjancee", "https://www.tiktok.com/@.jancenutt", "https://www.facebook.com/profile.php?id=61588059278192"],
         },
         {
           "@type": "Organization",

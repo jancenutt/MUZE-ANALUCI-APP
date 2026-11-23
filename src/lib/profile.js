@@ -4,6 +4,14 @@ export const ARTIST = {
   role: "Sound designer · Audio engineer · Recording artist",
   company: "JN MUZIK CLIK",
   site: "https://jancenutt.com",
+  sameAs: [
+    "https://jancenutt.com",
+    "https://soundcloud.com/jancenutt",
+    "https://www.instagram.com/analuci.app/",
+    "https://www.instagram.com/fknjancee/",
+    "https://www.threads.net/@fknjancee",
+    "https://www.tiktok.com/@.jancenutt",
+  ],
 };
 
 export const DISAMBIGUATION =
@@ -26,10 +34,10 @@ export const LINKS = [
   { label: "SoundCloud", value: "soundcloud.com/jancenutt", url: "https://soundcloud.com/jancenutt" },
   { label: "Spotify", value: "", url: "" },
   { label: "Apple Music", value: "", url: "" },
-  { label: "Instagram", value: "", url: "" },
+  { label: "Instagram", value: "instagram.com/analuci.app", url: "https://www.instagram.com/analuci.app/" },
   { label: "X", value: "", url: "" },
   { label: "YouTube", value: "", url: "" },
-  { label: "TikTok", value: "", url: "" },
+  { label: "TikTok", value: "tiktok.com/@.jancenutt", url: "https://www.tiktok.com/@.jancenutt" },
 ];
 
 export const SITE_LINKS = [

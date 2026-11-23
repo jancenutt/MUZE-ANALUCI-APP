@@ -32,7 +32,7 @@ export default function Brand() {
           "@type": "Person",
           "@id": `${SITE_URL}/#jance-nutt`,
           name: "J'ance Nutt",
-          alternateName: ["Jance Nutt", "jancenutt", "JAY.XYE", "JayNutt", "FknJance", "ZaddyXYE", "XYE"],
+          alternateName: ["Jance Nutt", "jancenutt", "JANCENUTT", "JAY.XYE", "JayNutt", "FknJance", "ZaddyXYE", "XYE"],
           jobTitle: "Sound designer, audio engineer, recording artist",
           url: "https://jancenutt.com",
           worksFor: { "@id": `${SITE_URL}/#jn-muzik-clik` },

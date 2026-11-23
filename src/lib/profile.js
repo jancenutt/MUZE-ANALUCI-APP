@@ -11,6 +11,7 @@ export const ARTIST = {
     "https://www.instagram.com/fknjancee/",
     "https://www.threads.net/@fknjancee",
     "https://www.tiktok.com/@.jancenutt",
+    "https://www.facebook.com/profile.php?id=61588059278192",
   ],
 };
 
@@ -38,6 +39,7 @@ export const LINKS = [
   { label: "X", value: "", url: "" },
   { label: "YouTube", value: "", url: "" },
   { label: "TikTok", value: "tiktok.com/@.jancenutt", url: "https://www.tiktok.com/@.jancenutt" },
+  { label: "Facebook", value: "Ana.Luci on Facebook", url: "https://www.facebook.com/profile.php?id=61588059278192" },
 ];
 
 export const SITE_LINKS = [

@@ -16,9 +16,9 @@ import { usePageMeta } from "@/lib/seo";
 
 export default function Archive() {
   usePageMeta({
-    title: "Catalog Archive — Every Release | AnaLuci.app",
+    title: "Archive — All 41 Releases by J'ance Nutt | AnaLuci.app",
     description:
-      "Browse the full J'ance Nutt catalog: albums, EPs, singles and mixtapes, with track manifests and on-demand audio.",
+      "Browse and stream the full J'ance Nutt archive on AnaLuci.app — 41 releases and 272 tracks: albums, EPs, singles and mixtapes by J'ance Nutt, free full songs, no account needed.",
     path: "/archive",
   });
 

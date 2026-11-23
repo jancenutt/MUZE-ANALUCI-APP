@@ -77,15 +77,19 @@ export default function ReleaseDetail() {
   };
 
   // Release pages are the deep indexable pages, so they carry their own album record.
+  // SEO always names J'ance Nutt as the artist, regardless of the alias stored
+  // on the release record — aliases live only in the site-wide alternateName data.
   usePageMeta({
     title: release
-      ? `${release.title} — ${release.artist || "J'ance Nutt"} | AnaLuci.app`
-      : "AnaLuci.app — Archive & Stream | J'ance Nutt",
+      ? `${release.title} by J'ance Nutt — AnaLuci.app`
+      : "AnaLuci.app — J'ance Nutt | Open Archive: 41 Releases & 272 Tracks, Free Full Songs",
     description: release
-      ? `${release.type} · ${release.title} by ${release.artist || "J'ance Nutt"}${
+      ? `${release.title} by J'ance Nutt${
           release.year ? ` (${release.year})` : ""
-        } — ${tracks.length} tracks in the AnaLuci.app archive.`
-      : "AnaLuci.app is the archive and on-demand streaming platform for artist J'ance Nutt.",
+        }${release.type ? ` — ${release.type}` : ""}${
+          tracks.length ? `, ${tracks.length} tracks` : ""
+        }. Stream the full release free in the AnaLuci.app open archive of J'ance Nutt.`
+      : "Stream the full music archive of J'ance Nutt free on AnaLuci.app — 41 releases and 272 tracks, full songs, no account needed.",
     path: `/release/${id}`,
     image: release?.cover_url,
     type: "music.album",
@@ -100,14 +104,19 @@ export default function ReleaseDetail() {
           datePublished: release.date || (release.year ? String(release.year) : undefined),
           numTracks: tracks.length || release.track_count,
           byArtist: {
-            "@type": "Person",
+            "@type": ["Person", "MusicGroup"],
             "@id": `${SITE_URL}/#jance-nutt`,
-            name: release.artist || "J'ance Nutt",
+            name: "J'ance Nutt",
           },
           track: tracks.slice(0, 100).map((track) => ({
             "@type": "MusicRecording",
             name: track.title,
             position: track.no,
+            byArtist: {
+              "@type": ["Person", "MusicGroup"],
+              "@id": `${SITE_URL}/#jance-nutt`,
+              name: "J'ance Nutt",
+            },
           })),
         }
       : undefined,
@@ -184,7 +193,7 @@ export default function ReleaseDetail() {
           <div className="relative overflow-hidden rounded-sm border border-amber/15 bg-panel hud-glow">
             <CoverImage
               src={release.cover_url}
-              alt={`${release.title} cover`}
+              alt={`${release.title} by J'ance Nutt — album cover`}
               className="aspect-square w-full"
             />
             {isAdmin ? (

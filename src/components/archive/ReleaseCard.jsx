@@ -11,7 +11,7 @@ export default function ReleaseCard({ release }) {
       <div className="relative aspect-square overflow-hidden bg-panel">
         <CoverImage
           src={release.cover_url}
-          alt={`${release.title} cover`}
+          alt={`${release.title} by J'ance Nutt — album cover`}
           className="opacity-85 transition-opacity duration-500 group-hover:opacity-100"
         />
         <span className="absolute left-2 top-2 rounded-sm bg-background/80 px-1.5 py-0.5 font-mono text-[9px] tracking-[0.22em] text-amber/80 backdrop-blur">

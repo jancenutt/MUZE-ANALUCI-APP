@@ -69,9 +69,9 @@ function HowItWorks() {
 
 export default function Home() {
   usePageMeta({
-    title: "AnaLuci.app — Archive & Stream | J'ance Nutt",
+    title: "AnaLuci.app — J'ance Nutt | Open Archive: 41 Releases & 272 Tracks, Free Full Songs",
     description:
-      "AnaLuci.app is the archive and on-demand streaming platform for artist J'ance Nutt — every release, track and master in one place. Browse free and stream the full archive.",
+      "Stream the full music archive of J'ance Nutt free on AnaLuci.app — 41 releases and 272 tracks, full songs, no account needed. The open, ad-free archive of albums, EPs, singles and mixtapes by J'ance Nutt.",
     path: "/",
   });
 

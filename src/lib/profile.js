@@ -1,6 +1,6 @@
 export const ARTIST = {
   name: "J'ance Nutt",
-  alternateName: ["Jance Nutt", "jancenutt"],
+  alternateName: ["Jance Nutt", "jancenutt", "JAY.XYE", "JayNutt", "FknJance", "ZaddyXYE", "XYE"],
   role: "Sound designer · Audio engineer · Recording artist",
   company: "JN MUZIK CLIK",
   site: "https://jancenutt.com",

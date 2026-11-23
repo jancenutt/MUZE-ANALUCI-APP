@@ -4,6 +4,7 @@ import { CornerDownLeft, Loader2 } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import MicroLabel from "@/components/MicroLabel";
 import CloseButton from "@/components/CloseButton";
+import { usePageMeta } from "@/lib/seo";
 
 const SUGGESTIONS = [
   "What's the newest release?",
@@ -18,6 +19,13 @@ const GREETING = {
 };
 
 export default function Ask() {
+  usePageMeta({
+    title: "Ask ANA.LUCI — J'ance Nutt Archive Assistant | AnaLuci.app",
+    description:
+      "Ask ANA.LUCI about the music of J'ance Nutt — search 41 releases and 272 tracks in the AnaLuci.app open archive and find the right release by J'ance Nutt.",
+    path: "/ask",
+  });
+
   const [messages, setMessages] = useState([GREETING]);
   const [input, setInput] = useState("");
   const [busy, setBusy] = useState(false);

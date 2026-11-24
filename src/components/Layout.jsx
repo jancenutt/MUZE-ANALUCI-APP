@@ -59,6 +59,12 @@ function LayoutInner() {
                   {doc.short}
                 </Link>
               ))}
+              <Link
+                to="/links"
+                className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground transition-colors hover:text-amber"
+              >
+                All links
+              </Link>
             </nav>
             <p className="font-mono text-[9px] uppercase tracking-[0.18em] text-muted-foreground/60">
               {DATA_RATES_NOTICE}

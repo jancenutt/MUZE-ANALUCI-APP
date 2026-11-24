@@ -1,11 +1,13 @@
 import { Link } from "react-router-dom";
 import CoverImage from "@/components/CoverImage";
 import { padNumber } from "@/lib/format";
+import { releasePath, useReleaseSlugMap } from "@/lib/slugs";
 
 export default function ReleaseCard({ release }) {
+  const slugMap = useReleaseSlugMap();
   return (
     <Link
-      to={`/release/${release.id}`}
+      to={slugMap ? releasePath(release, slugMap) : `/release/${release.id}`}
       className="group hud-panel relative flex flex-col overflow-hidden rounded-sm transition-all hover:border-amber/35 hover:shadow-[0_30px_60px_-40px_hsl(35_100%_64%/0.55)]"
     >
       <div className="relative aspect-square overflow-hidden bg-panel">

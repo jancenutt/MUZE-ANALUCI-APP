@@ -70,6 +70,8 @@ const AuthenticatedApp = () => {
         <Route path="/" element={<Home />} />
         <Route path="/archive" element={<Archive />} />
         <Route path="/release/:id" element={<ReleaseDetail />} />
+        {/* Clean release URLs: /<artistSlug>/<titleSlug>, e.g. /jancenutt/22 */}
+        <Route path="/:artistSeg/:slugSeg" element={<ReleaseDetail />} />
         <Route path="/ask" element={<Ask />} />
         <Route element={<AdminOnlyRoute />}>
           <Route path="/membership" element={<Membership />} />

@@ -4,9 +4,11 @@ import CoverImage from "@/components/CoverImage";
 import { base44 } from "@/api/base44Client";
 import MicroLabel from "@/components/MicroLabel";
 import { padNumber } from "@/lib/format";
+import { releasePath, useReleaseSlugMap } from "@/lib/slugs";
 
 export default function FeaturedGrid() {
   const [releases, setReleases] = useState([]);
+  const slugMap = useReleaseSlugMap();
 
   useEffect(() => {
     base44.entities.Release
@@ -42,7 +44,7 @@ export default function FeaturedGrid() {
           : releases.map((release) => (
               <Link
                 key={release.id}
-                to={`/release/${release.id}`}
+                to={slugMap ? releasePath(release, slugMap) : `/release/${release.id}`}
                 className="hud-panel group relative overflow-hidden rounded-sm transition-all hover:border-amber/35"
               >
                 <div className="relative aspect-[4/3] overflow-hidden bg-panel">

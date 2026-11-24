@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, Navigate, useParams } from "react-router-dom";
 import { ArrowLeft, Play, ListPlus, Loader2 } from "lucide-react";
 import CoverImage from "@/components/CoverImage";
 import { base44 } from "@/api/base44Client";
@@ -17,20 +17,25 @@ import useIsAdmin from "@/hooks/useIsAdmin";
 import { usePlayer } from "@/lib/player";
 import { padNumber } from "@/lib/format";
 import { SITE_URL, usePageMeta } from "@/lib/seo";
+import { loadSlugMap, releasePath } from "@/lib/slugs";
 
 export default function ReleaseDetail() {
-  const { id } = useParams();
+  const { id, artistSeg, slugSeg } = useParams();
   const [release, setRelease] = useState(null);
   const [tracks, setTracks] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [slugMap, setSlugMap] = useState(null);
   const [artBusy, setArtBusy] = useState("");
   const isAdmin = useIsAdmin();
   const { current, playing, playFrom, addToQueue } = usePlayer();
 
-  const load = async () => {
+  const load = async (targetId) => {
     try {
-      const record = await base44.entities.Release.get(id);
-      const page = await base44.entities.Track.filter({ release_id: id }, { sort: "no", limit: 200 });
+      const record = await base44.entities.Release.get(targetId);
+      const page = await base44.entities.Track.filter(
+        { release_id: targetId },
+        { sort: "no", limit: 200 }
+      );
       setRelease(record);
       setTracks(page.items);
     } catch (err) {
@@ -40,15 +45,42 @@ export default function ReleaseDetail() {
     }
   };
 
+  const reload = () => {
+    if (release) load(release.id);
+  };
+
+  // Two entry routes land here: the clean /<artist>/<slug> URL and the legacy
+  // /release/<id> URL. Both resolve to the same release; the legacy route (and
+  // any wrong artist segment) then replace-redirects to the canonical clean
+  // URL below, so old shared links keep working forever.
   useEffect(() => {
     let alive = true;
     setLoading(true);
-    load().then(() => alive);
+    setRelease(null);
+    setTracks([]);
+    (async () => {
+      const map = await loadSlugMap();
+      if (!alive) return;
+      setSlugMap(map);
+      let targetId = id;
+      if (!targetId && slugSeg) {
+        targetId = map.bySlug.get(slugSeg);
+        if (!targetId) {
+          setLoading(false);
+          return;
+        }
+      }
+      if (targetId) await load(targetId);
+      else setLoading(false);
+    })();
     return () => {
       alive = false;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id]);
+  }, [id, slugSeg]);
+
+  const canonicalPath = release && slugMap ? releasePath(release, slugMap) : null;
+  const currentPath = id ? `/release/${id}` : `/${artistSeg}/${slugSeg}`;
 
   useEffect(() => {
     if (loading || release) return;
@@ -90,16 +122,16 @@ export default function ReleaseDetail() {
           tracks.length ? `, ${tracks.length} tracks` : ""
         }. Stream the full release free in the AnaLuci.app open archive of J'ance Nutt.`
       : "Stream the full music archive of J'ance Nutt free on AnaLuci.app — 41 releases and 272 tracks, full songs, no account needed.",
-    path: `/release/${id}`,
+    path: canonicalPath || currentPath,
     image: release?.cover_url,
     type: "music.album",
     jsonLd: release
       ? {
           "@context": "https://schema.org",
           "@type": "MusicAlbum",
-          "@id": `${SITE_URL}/release/${release.id}#album`,
+          "@id": `${SITE_URL}${canonicalPath || currentPath}#album`,
           name: release.title,
-          url: `${SITE_URL}/release/${release.id}`,
+          url: `${SITE_URL}${canonicalPath || currentPath}`,
           image: release.cover_url,
           datePublished: release.date || (release.year ? String(release.year) : undefined),
           numTracks: tracks.length || release.track_count,
@@ -133,7 +165,7 @@ export default function ReleaseDetail() {
         { release_id: release.id },
         { $set: { cover_url: file_url } }
       );
-      await load();
+      await load(release.id);
     } finally {
       setArtBusy("");
     }
@@ -145,7 +177,7 @@ export default function ReleaseDetail() {
     try {
       const { file_url } = await base44.integrations.Core.UploadPublicFile({ file });
       await base44.entities.Track.update(track.id, { cover_url: file_url });
-      await load();
+      await load(release.id);
     } finally {
       setArtBusy("");
     }
@@ -157,6 +189,10 @@ export default function ReleaseDetail() {
         <Loader2 className="h-5 w-5 animate-spin text-amber" />
       </div>
     );
+  }
+
+  if (release && canonicalPath && currentPath !== canonicalPath) {
+    return <Navigate to={canonicalPath} replace />;
   }
 
   if (!release) {
@@ -280,7 +316,7 @@ export default function ReleaseDetail() {
                 isPlaying={playing && current?.id === track.id}
                 releaseCover={release.cover_url}
                 onArtwork={isAdmin ? replaceTrackArt : undefined}
-                onAudio={isAdmin ? load : undefined}
+                onAudio={isAdmin ? reload : undefined}
                 busy={artBusy === track.id}
                 onPlay={playTrack}
                 onQueue={addToQueue}
@@ -295,10 +331,10 @@ export default function ReleaseDetail() {
         </div>
 
         <div className="space-y-4">
-          {isAdmin ? <BulkAudioUpload tracks={tracks} onUpdated={load} /> : null}
-          {isAdmin ? <AudioIntake tracks={tracks} onUpdated={load} /> : null}
-          {isAdmin ? <VideoIntake tracks={tracks} onUpdated={load} /> : null}
-          {isAdmin ? <DropIntake release={release} onUpdated={load} /> : null}
+          {isAdmin ? <BulkAudioUpload tracks={tracks} onUpdated={reload} /> : null}
+          {isAdmin ? <AudioIntake tracks={tracks} onUpdated={reload} /> : null}
+          {isAdmin ? <VideoIntake tracks={tracks} onUpdated={reload} /> : null}
+          {isAdmin ? <DropIntake release={release} onUpdated={reload} /> : null}
           <div className="hud-panel rounded-sm px-4 py-4">
             <MicroLabel>Stream note</MicroLabel>
             <p className="mt-3 text-xs leading-relaxed text-foreground/60">

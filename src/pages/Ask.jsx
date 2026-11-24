@@ -5,6 +5,7 @@ import { base44 } from "@/api/base44Client";
 import MicroLabel from "@/components/MicroLabel";
 import CloseButton from "@/components/CloseButton";
 import { usePageMeta } from "@/lib/seo";
+import { releasePath, useReleaseSlugMap } from "@/lib/slugs";
 
 const SUGGESTIONS = [
   "What's the newest release?",
@@ -26,6 +27,7 @@ export default function Ask() {
     path: "/ask",
   });
 
+  const slugMap = useReleaseSlugMap();
   const [messages, setMessages] = useState([GREETING]);
   const [input, setInput] = useState("");
   const [busy, setBusy] = useState(false);
@@ -100,7 +102,7 @@ export default function Ask() {
                 </p>
                 {message.release ? (
                   <Link
-                    to={`/release/${message.release.id}`}
+                    to={slugMap ? releasePath(message.release, slugMap) : `/release/${message.release.id}`}
                     className="mt-2 inline-flex items-center gap-2 rounded-sm border border-amber/25 px-3 py-2 font-mono text-[9px] uppercase tracking-[0.2em] text-amber/80 transition-colors hover:bg-amber/10"
                   >
                     Open {message.release.title} →

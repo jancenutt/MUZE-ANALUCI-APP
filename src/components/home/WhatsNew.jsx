@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import MicroLabel from "@/components/MicroLabel";
 import CoverImage from "@/components/CoverImage";
+import { releasePath, useReleaseSlugMap } from "@/lib/slugs";
 
 const TYPE_LABEL = {
   audio: "Music",
@@ -21,6 +22,7 @@ function monthLabel(release) {
 // Announcements live here: new releases and drops are part of the service, not advertising.
 export default function WhatsNew() {
   const [items, setItems] = useState([]);
+  const slugMap = useReleaseSlugMap();
 
   useEffect(() => {
     base44.entities.Release.filter({}, { sort: "-year", limit: 4 })
@@ -52,7 +54,7 @@ export default function WhatsNew() {
           {items.map((release) => (
             <Link
               key={release.id}
-              to={`/release/${release.id}`}
+              to={slugMap ? releasePath(release, slugMap) : `/release/${release.id}`}
               className="hud-panel flex items-center gap-3 rounded-sm p-2.5 transition-colors hover:border-amber/30"
             >
               <div className="h-11 w-11 shrink-0 overflow-hidden rounded-sm border border-white/10 bg-panel">

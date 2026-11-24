@@ -18,7 +18,10 @@ const LibrarySync = lazy(() => import('@/pages/LibrarySync'));
 const ThankYou = lazy(() => import('./pages/ThankYou'));
 const Profile = lazy(() => import('@/pages/Profile'));
 const Brand = lazy(() => import('@/pages/Brand'));
+const Links = lazy(() => import('@/pages/Links'));
 const Admin = lazy(() => import('@/pages/Admin'));
+const ArtistStats = lazy(() => import('@/pages/ArtistStats'));
+const ClaimArtist = lazy(() => import('@/pages/ClaimArtist'));
 import Login from '@/pages/Login';
 import Register from '@/pages/Register';
 import ForgotPassword from '@/pages/ForgotPassword';
@@ -32,6 +35,12 @@ const Terms = lazy(() => import('@/pages/Terms'));
 const TermsOfUse = lazy(() => import('@/pages/TermsOfUse'));
 const Privacy = lazy(() => import('@/pages/Privacy'));
 // Add page imports here
+
+// The artist subdomain (artist.analuci.app) exists for one thing: the
+// owner's private stats page. Anyone landing on its root is sent straight
+// there — and the admin gate on /artist decides who actually gets in.
+const IS_ARTIST_HOST =
+  typeof window !== "undefined" && window.location.hostname === "artist.analuci.app";
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -67,22 +76,26 @@ const AuthenticatedApp = () => {
     >
     <Routes>
       <Route element={<Layout />}>
-        <Route path="/" element={<Home />} />
+        <Route
+          path="/"
+          element={IS_ARTIST_HOST ? <Navigate to="/artist" replace /> : <Home />}
+        />
         <Route path="/archive" element={<Archive />} />
+        <Route path="/claim-artist" element={<ClaimArtist />} />
         <Route path="/release/:id" element={<ReleaseDetail />} />
-        {/* Clean release URLs: /<artistSlug>/<titleSlug>, e.g. /jancenutt/22 */}
-        <Route path="/:artistSeg/:slugSeg" element={<ReleaseDetail />} />
         <Route path="/ask" element={<Ask />} />
         <Route element={<AdminOnlyRoute />}>
           <Route path="/membership" element={<Membership />} />
           <Route path="/pricing" element={<Navigate to="/membership" replace />} />
           <Route path="/join" element={<Join />} />
+          <Route path="/artist" element={<ArtistStats />} />
         </Route>
         <Route path="/terms" element={<Terms />} />
         <Route path="/terms-of-use" element={<TermsOfUse />} />
         <Route path="/privacy" element={<Privacy />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/brand" element={<Brand />} />
+        <Route path="/links" element={<Links />} />
         <Route path="/sync" element={<LibrarySync />} />
         <Route
           element={<ProtectedRoute unauthenticatedElement={<Navigate to="/login" replace />} />}

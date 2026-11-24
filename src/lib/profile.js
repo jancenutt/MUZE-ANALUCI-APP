@@ -7,6 +7,8 @@ export const ARTIST = {
   sameAs: [
     "https://jancenutt.com",
     "https://soundcloud.com/jancenutt",
+    "https://www.youtube.com/jancenutt",
+    "https://x.com/jancenutt",
     "https://www.instagram.com/analuci.app/",
     "https://www.instagram.com/fknjancee/",
     "https://www.threads.net/@fknjancee",
@@ -34,10 +36,14 @@ export const LINKS = [
   },
   { label: "SoundCloud", value: "soundcloud.com/jancenutt", url: "https://soundcloud.com/jancenutt" },
   { label: "Spotify", value: "", url: "" },
-  { label: "Apple Music", value: "", url: "" },
+  {
+    label: "Apple Music",
+    value: "J'ance Nutt playlist (55 songs)",
+    url: "https://music.apple.com/us/playlist/jance-nutt/pl.u-BNA6vvNTeKXyBYE",
+  },
   { label: "Instagram", value: "instagram.com/analuci.app", url: "https://www.instagram.com/analuci.app/" },
-  { label: "X", value: "", url: "" },
-  { label: "YouTube", value: "", url: "" },
+  { label: "X", value: "x.com/jancenutt", url: "https://x.com/jancenutt" },
+  { label: "YouTube", value: "youtube.com/jancenutt", url: "https://www.youtube.com/jancenutt" },
   { label: "TikTok", value: "tiktok.com/@.jancenutt", url: "https://www.tiktok.com/@.jancenutt" },
   { label: "Facebook", value: "Ana.Luci on Facebook", url: "https://www.facebook.com/profile.php?id=61588059278192" },
 ];

@@ -11,7 +11,6 @@ import Layout from '@/components/Layout';
 import Home from '@/pages/Home';
 import Archive from '@/pages/Archive';
 import ReleaseDetail from '@/pages/ReleaseDetail';
-import ReleaseSlugRedirect from '@/pages/ReleaseSlugRedirect';
 import Ask from '@/pages/Ask';
 import Membership from '@/pages/Membership';
 import Account from '@/pages/Account';
@@ -84,7 +83,7 @@ const AuthenticatedApp = () => {
         <Route path="/archive" element={<Archive />} />
         <Route path="/claim-artist" element={<ClaimArtist />} />
         <Route path="/release/:id" element={<ReleaseDetail />} />
-        <Route path="/jayxye/:slug" element={<ReleaseSlugRedirect />} />
+        <Route path="/:artistSeg/:slugSeg" element={<ReleaseDetail />} />
         <Route path="/ask" element={<Ask />} />
         <Route element={<AdminOnlyRoute />}>
           <Route path="/membership" element={<Membership />} />

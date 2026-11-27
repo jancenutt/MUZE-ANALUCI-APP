@@ -3,6 +3,7 @@ import { ListPlus, Loader2, Play, Trash2 } from "lucide-react";
 import CoverImage from "@/components/CoverImage";
 import { base44 } from "@/api/base44Client";
 import { usePlayer } from "@/lib/player";
+import { getTracks } from "@/lib/catalogData";
 
 export default function PlaylistDetail({ playlist, onChanged }) {
   const [tracks, setTracks] = useState([]);
@@ -18,10 +19,13 @@ export default function PlaylistDetail({ playlist, onChanged }) {
       return undefined;
     }
     setLoading(true);
-    base44.entities.Track.filter({ id: { $in: ids } }, { limit: 300 })
-      .then((page) => {
+    getTracks()
+      .then((allTracks) => {
         if (!alive) return;
-        const byId = new Map(page.items.map((track) => [track.id, track]));
+        const wanted = new Set(ids);
+        const byId = new Map(
+          allTracks.filter((track) => wanted.has(track.id)).map((track) => [track.id, track])
+        );
         setTracks(ids.map((id) => byId.get(id)).filter(Boolean));
       })
       .catch(() => alive && setTracks([]))

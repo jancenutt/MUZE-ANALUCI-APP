@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { ArrowUpRight, Play } from "lucide-react";
 import MicroLabel from "@/components/MicroLabel";
 import { TelemetryRight } from "@/components/home/HudTelemetry";
-import { base44 } from "@/api/base44Client";
+import { getReleases, getTracks } from "@/lib/catalogData";
 
 const HERO_VIDEO =
   "https://media.base44.com/videos/public/user_6adbe2cf8290cc62f80be414/0a4b7acd7_seedance_20_2026-11-07-16-38-44.mp4";
@@ -12,8 +12,8 @@ export default function Hero() {
   const [counts, setCounts] = useState({ releases: null, tracks: null });
 
   useEffect(() => {
-    Promise.all([base44.entities.Release.count(), base44.entities.Track.count()])
-      .then(([releases, tracks]) => setCounts({ releases, tracks }))
+    Promise.all([getReleases(), getTracks()])
+      .then(([releases, tracks]) => setCounts({ releases: releases.length, tracks: tracks.length }))
       .catch(() => {});
   }, []);
 

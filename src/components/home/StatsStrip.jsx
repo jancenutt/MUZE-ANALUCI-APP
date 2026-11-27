@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { base44 } from "@/api/base44Client";
 import MicroLabel from "@/components/MicroLabel";
 import { fetchArtists } from "@/lib/catalog";
+import { getReleases, getTracks } from "@/lib/catalogData";
 
 const TYPE_LABELS = {
   audio: "Music",
@@ -23,26 +23,24 @@ export default function StatsStrip() {
   const [types, setTypes] = useState([]);
 
   useEffect(() => {
-    Promise.all([
-      base44.entities.Release.count(),
-      base44.entities.Track.count(),
-      fetchArtists().catch(() => []),
-      base44.entities.Release.aggregate({ groupBy: "content_type" }).catch(() => ({ rows: [] })),
-    ])
-      .then(([releases, tracks, artists, grouped]) => {
+    Promise.all([getReleases(), getTracks(), fetchArtists().catch(() => [])])
+      .then(([releaseList, trackList, artists]) => {
         setStats([
-          { label: "Releases", value: String(releases) },
-          { label: "Tracks", value: String(tracks) },
+          { label: "Releases", value: String(releaseList.length) },
+          { label: "Tracks", value: String(trackList.length) },
           { label: "Aliases", value: String(artists.length) },
           { label: "Span", value: "2020 →" },
         ]);
+        const byType = new Map();
+        releaseList.forEach((release) => {
+          const key = release.content_type || "audio";
+          byType.set(key, (byType.get(key) || 0) + 1);
+        });
         setTypes(
-          (grouped?.rows || [])
-            .filter((row) => row.count > 0)
-            .map((row) => ({
-              type: row.content_type || "audio",
-              count: row.count,
-            }))
+          [...byType.entries()].map(([content_type, count]) => ({
+            type: content_type,
+            count,
+          }))
         );
       })
       .catch(() => {});

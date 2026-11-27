@@ -18,6 +18,7 @@ import { usePlayer } from "@/lib/player";
 import { padNumber } from "@/lib/format";
 import { SITE_URL, usePageMeta } from "@/lib/seo";
 import { loadSlugMap, releasePath } from "@/lib/slugs";
+import { getReleases, getTracks } from "@/lib/catalogData";
 
 export default function ReleaseDetail() {
   const { id, artistSeg, slugSeg } = useParams();
@@ -31,13 +32,15 @@ export default function ReleaseDetail() {
 
   const load = async (targetId) => {
     try {
-      const record = await base44.entities.Release.get(targetId);
-      const page = await base44.entities.Track.filter(
-        { release_id: targetId },
-        { sort: "no", limit: 200 }
-      );
+      const releases = await getReleases();
+      const record = releases.find((item) => item.id === targetId);
+      if (!record) throw new Error("release not in catalog");
+      const allTracks = await getTracks();
+      const items = allTracks
+        .filter((track) => track.release_id === targetId)
+        .sort((a, b) => (a.no ?? 0) - (b.no ?? 0));
       setRelease(record);
-      setTracks(page.items);
+      setTracks(items);
     } catch (err) {
       setRelease(null);
     } finally {

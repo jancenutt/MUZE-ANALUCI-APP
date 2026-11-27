@@ -41,8 +41,11 @@ export function PlayerProvider({ children }) {
     setPreviewRange(null);
   }, [entitlement.restricted]);
 
-  // A stream link is minted only for the track being played — never on page load.
+  // Tracks carry their Cloudflare stream URL in the catalog now — playback
+  // reads straight from R2. The old Base44 signed-link mint stays as a
+  // fallback for any track the catalog snapshot does not cover.
   const streamUrl = useCallback(async (track) => {
+    if (track.stream_url) return track.stream_url;
     const cached = cacheRef.current.get(track.audio_uri);
     if (cached && cached.expires > Date.now() + 120000) return cached.url;
     const { signed_url } = await base44.integrations.Core.CreateFileSignedUrl({

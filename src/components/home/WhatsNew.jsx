@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { base44 } from "@/api/base44Client";
+import { getReleases } from "@/lib/catalogData";
 import MicroLabel from "@/components/MicroLabel";
 import CoverImage from "@/components/CoverImage";
 import { releasePath, useReleaseSlugMap } from "@/lib/slugs";
@@ -25,8 +25,10 @@ export default function WhatsNew() {
   const slugMap = useReleaseSlugMap();
 
   useEffect(() => {
-    base44.entities.Release.filter({}, { sort: "-year", limit: 4 })
-      .then((page) => setItems(page.items || []))
+    getReleases()
+      .then((releases) =>
+        setItems([...releases].sort((a, b) => (b.year ?? 0) - (a.year ?? 0)).slice(0, 4))
+      )
       .catch(() => {});
   }, []);
 

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import CoverImage from "@/components/CoverImage";
-import { base44 } from "@/api/base44Client";
+import { getReleases } from "@/lib/catalogData";
 import MicroLabel from "@/components/MicroLabel";
 import { padNumber } from "@/lib/format";
 import { releasePath, useReleaseSlugMap } from "@/lib/slugs";
@@ -11,9 +11,10 @@ export default function FeaturedGrid() {
   const slugMap = useReleaseSlugMap();
 
   useEffect(() => {
-    base44.entities.Release
-      .filter({}, { sort: "num", limit: 6 })
-      .then((page) => setReleases(page.items))
+    getReleases()
+      .then((releases) =>
+        setReleases([...releases].sort((a, b) => (a.num ?? 0) - (b.num ?? 0)).slice(0, 6))
+      )
       .catch(() => setReleases([]));
   }, []);
 

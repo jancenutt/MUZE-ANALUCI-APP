@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { base44 } from "@/api/base44Client";
+import { getReleases } from "@/lib/catalogData";
 
 // Clean release URLs: /<artistSlug>/<titleSlug>
 // - artistSlug: the artist name as ONE joined word — lowercase, every
@@ -72,8 +72,8 @@ let slugMapPromise = null;
 // Loads the full catalog once and shares the resulting slug map.
 export function loadSlugMap() {
   if (!slugMapPromise) {
-    slugMapPromise = base44.entities.Release.filter({}, { sort: "num", limit: 300 })
-      .then((page) => buildSlugMap(page.items || []))
+    slugMapPromise = getReleases()
+      .then((releases) => buildSlugMap(releases || []))
       .catch(() => {
         slugMapPromise = null;
         return { byId: new Map(), bySlug: new Map() };

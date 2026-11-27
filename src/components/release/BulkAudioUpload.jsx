@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { base44 } from "@/api/base44Client";
+import { uploadIntakeFile } from "@/lib/intake";
 import MicroLabel from "@/components/MicroLabel";
 
 // Tracks are matched to files by name, so a folder of tagged exports can be dropped in at once.
@@ -51,11 +51,11 @@ export default function BulkAudioUpload({ tracks, onUpdated }) {
       }
       try {
         const duration = await readDuration(file);
-        const { file_uri } = await base44.integrations.Core.UploadPrivateFile({ file });
-        await base44.entities.Track.update(track.id, {
-          audio_uri: file_uri,
-          has_audio: true,
-          is_demo: false,
+        await uploadIntakeFile({
+          file,
+          kind: "audio",
+          releaseId: track.release_id,
+          trackId: track.id,
           duration,
         });
         results.push(`${file.name} → ${track.title}`);

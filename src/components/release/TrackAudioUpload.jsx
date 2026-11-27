@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Loader2, Upload } from "lucide-react";
-import { base44 } from "@/api/base44Client";
+import { uploadIntakeFile } from "@/lib/intake";
 import { readAudioDuration } from "@/lib/audioMeta";
 
 // Owner-only shortcut that sits exactly where the "Coming soon" marker shows on the public
@@ -15,11 +15,11 @@ export default function TrackAudioUpload({ track, onUpdated, label = "Attach aud
     setFailed(false);
     try {
       const duration = await readAudioDuration(file);
-      const { file_uri } = await base44.integrations.Core.UploadPrivateFile({ file });
-      await base44.entities.Track.update(track.id, {
-        audio_uri: file_uri,
-        has_audio: true,
-        is_demo: false,
+      await uploadIntakeFile({
+        file,
+        kind: "audio",
+        releaseId: track.release_id,
+        trackId: track.id,
         duration,
       });
       await onUpdated?.();

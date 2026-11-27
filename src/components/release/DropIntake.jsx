@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Loader2, Package } from "lucide-react";
-import { base44 } from "@/api/base44Client";
+import { uploadIntakeFile } from "@/lib/intake";
 import MicroLabel from "@/components/MicroLabel";
 
 // The drop package is the ZIP that emails go out with. Uploaded privately, never served
@@ -14,8 +14,7 @@ export default function DropIntake({ release, onUpdated }) {
     setBusy(true);
     setError("");
     try {
-      const { file_uri } = await base44.integrations.Core.UploadPrivateFile({ file });
-      await base44.entities.Release.update(release.id, { drop_uri: file_uri });
+      await uploadIntakeFile({ file, kind: "drop", releaseId: release.id });
       await onUpdated();
     } catch (err) {
       setError("Upload failed.");

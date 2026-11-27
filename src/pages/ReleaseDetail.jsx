@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { Link, Navigate, useParams } from "react-router-dom";
 import { ArrowLeft, Play, ListPlus, Loader2 } from "lucide-react";
 import CoverImage from "@/components/CoverImage";
-import { base44 } from "@/api/base44Client";
 import MicroLabel from "@/components/MicroLabel";
 import CloseButton from "@/components/CloseButton";
 import ReleaseMeta from "@/components/release/ReleaseMeta";
@@ -19,6 +18,7 @@ import { padNumber } from "@/lib/format";
 import { SITE_URL, usePageMeta } from "@/lib/seo";
 import { loadSlugMap, releasePath } from "@/lib/slugs";
 import { getReleases, getTracks } from "@/lib/catalogData";
+import { uploadIntakeFile } from "@/lib/intake";
 
 export default function ReleaseDetail() {
   const { id, artistSeg, slugSeg } = useParams();
@@ -162,12 +162,7 @@ export default function ReleaseDetail() {
     if (!file || !release) return;
     setArtBusy("release");
     try {
-      const { file_url } = await base44.integrations.Core.UploadPublicFile({ file });
-      await base44.entities.Release.update(release.id, { cover_url: file_url });
-      await base44.entities.Track.updateMany(
-        { release_id: release.id },
-        { $set: { cover_url: file_url } }
-      );
+      await uploadIntakeFile({ file, kind: "cover-release", releaseId: release.id });
       await load(release.id);
     } finally {
       setArtBusy("");
@@ -178,8 +173,7 @@ export default function ReleaseDetail() {
     if (!file) return;
     setArtBusy(track.id);
     try {
-      const { file_url } = await base44.integrations.Core.UploadPublicFile({ file });
-      await base44.entities.Track.update(track.id, { cover_url: file_url });
+      await uploadIntakeFile({ file, kind: "cover-track", releaseId: track.release_id, trackId: track.id });
       await load(release.id);
     } finally {
       setArtBusy("");

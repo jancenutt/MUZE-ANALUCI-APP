@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Lock, Unlock } from "lucide-react";
-import { base44 } from "@/api/base44Client";
+import { uploadIntakeFile, updateCatalogRecord } from "@/lib/intake";
 import MicroLabel from "@/components/MicroLabel";
 import { padNumber } from "@/lib/format";
 
@@ -15,8 +15,7 @@ export default function VideoIntake({ tracks, onUpdated }) {
     setBusyId(track.id);
     setStatus("");
     try {
-      const { file_uri } = await base44.integrations.Core.UploadPrivateFile({ file });
-      await base44.entities.Track.update(track.id, { video_uri: file_uri, video_public: false });
+      await uploadIntakeFile({ file, kind: "video", releaseId: track.release_id, trackId: track.id });
       setStatus(`Video attached to ${track.title} — kept private`);
       await onUpdated?.();
     } catch (err) {
@@ -30,7 +29,7 @@ export default function VideoIntake({ tracks, onUpdated }) {
     setBusyId(track.id);
     try {
       const next = !track.video_public;
-      await base44.entities.Track.update(track.id, { video_public: next });
+      await updateCatalogRecord({ target: "track", id: track.id, fields: { video_public: next } });
       setStatus(`${track.title} video is now ${next ? "public" : "private"}`);
       await onUpdated?.();
     } finally {

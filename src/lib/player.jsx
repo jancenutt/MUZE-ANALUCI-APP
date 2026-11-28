@@ -32,6 +32,11 @@ export function PlayerProvider({ children }) {
   const savedOrderRef = useRef(null);
   const previewRangeRef = useRef(null);
   const pendingPreviewRef = useRef(false);
+  // Playback intent: true while the listener wants music playing. The OS can
+  // pause the element on its own (screen lock, an interruption) — that must
+  // not clear intent, so only the listener's own pause actions clear it.
+  const wantPlayRef = useRef(false);
+  const lastPositionRef = useRef(-1);
   const entitlement = useEntitlement();
 
   // Once a membership arrives, the snippet window is dropped mid-track.
@@ -84,12 +89,14 @@ export function PlayerProvider({ children }) {
       audio.pause();
       if (!track.has_audio || !track.audio_uri) {
         audio.removeAttribute("src");
+        wantPlayRef.current = false;
         setPlaying(false);
         setLoading(false);
         setNotice("This master isn't in the archive yet");
         return;
       }
       setLoading(true);
+      wantPlayRef.current = true;
       setPlaying(true);
       try {
         const url = await streamUrl(track);
@@ -132,12 +139,14 @@ export function PlayerProvider({ children }) {
       return;
     }
     if (audio.paused) {
+      wantPlayRef.current = true;
       try {
         await audio.play();
       } catch (err) {
         setPlaying(false);
       }
     } else {
+      wantPlayRef.current = false;
       audio.pause();
     }
   }, [current, start]);
@@ -359,7 +368,21 @@ export function PlayerProvider({ children }) {
       },
       previoustrack: prev,
       nexttrack: next,
-      stop: () => audioRef.current?.pause(),
+      stop: () => {
+        wantPlayRef.current = false;
+        audioRef.current?.pause();
+      },
+      seekbackward: (event) => {
+        const audio = audioRef.current;
+        if (audio) seek(Math.max(0, audio.currentTime - (event.seekOffset || 10)));
+      },
+      seekforward: (event) => {
+        const audio = audioRef.current;
+        if (audio) seek(audio.currentTime + (event.seekOffset || 10));
+      },
+      seekto: (event) => {
+        if (typeof event.seekTime === "number") seek(event.seekTime);
+      },
     };
     Object.entries(handlers).forEach(([action, handler]) => {
       try {
@@ -377,7 +400,7 @@ export function PlayerProvider({ children }) {
         }
       });
     };
-  }, [toggle, prev, next]);
+  }, [toggle, prev, next, seek]);
 
   useEffect(() => {
     if (typeof navigator === "undefined" || !("mediaSession" in navigator)) return;
@@ -387,6 +410,48 @@ export function PlayerProvider({ children }) {
       // Safari exposes the session but keeps this member read-only on older versions.
     }
   }, [playing]);
+
+  // If the OS cut playback while the phone was locked or the page sat in the
+  // background, pick the music back up the moment the page is seen again —
+  // but only when the listener never asked for it to stop.
+  useEffect(() => {
+    const resume = () => {
+      if (document.visibilityState !== "visible") return;
+      const audio = audioRef.current;
+      if (!audio || !wantPlayRef.current) return;
+      if (audio.paused && audio.src && !audio.ended) {
+        audio.play().catch(() => {
+          // Still blocked — the next press of play starts it.
+        });
+      }
+    };
+    document.addEventListener("visibilitychange", resume);
+    window.addEventListener("pageshow", resume);
+    window.addEventListener("focus", resume);
+    return () => {
+      document.removeEventListener("visibilitychange", resume);
+      window.removeEventListener("pageshow", resume);
+      window.removeEventListener("focus", resume);
+    };
+  }, []);
+
+  // Lock-screen scrubber position, reported once a second at most.
+  useEffect(() => {
+    if (typeof navigator === "undefined" || !("mediaSession" in navigator)) return;
+    if (!duration || !Number.isFinite(duration)) return;
+    const whole = Math.floor(time);
+    if (whole === lastPositionRef.current) return;
+    lastPositionRef.current = whole;
+    try {
+      navigator.mediaSession.setPositionState({
+        duration,
+        playbackRate: 1,
+        position: Math.min(Math.max(time, 0), duration),
+      });
+    } catch (err) {
+      // Position state is a progressive enhancement.
+    }
+  }, [time, duration]);
 
   const value = {
     current,
@@ -431,6 +496,7 @@ export function PlayerProvider({ children }) {
           const el = e.currentTarget;
           const range = previewRangeRef.current;
           if (range && el.currentTime >= range.end - 0.12) {
+            wantPlayRef.current = false;
             el.pause();
             el.currentTime = range.start;
             setTime(range.start);

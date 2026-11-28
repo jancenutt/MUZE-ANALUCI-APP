@@ -372,14 +372,10 @@ export function PlayerProvider({ children }) {
         wantPlayRef.current = false;
         audioRef.current?.pause();
       },
-      seekbackward: (event) => {
-        const audio = audioRef.current;
-        if (audio) seek(Math.max(0, audio.currentTime - (event.seekOffset || 10)));
-      },
-      seekforward: (event) => {
-        const audio = audioRef.current;
-        if (audio) seek(audio.currentTime + (event.seekOffset || 10));
-      },
+      // No seekbackward/seekforward handlers on purpose: registering them
+      // makes the lock screen show 10-second skip buttons INSTEAD of the
+      // previous/next track buttons. seekto stays, so the lock-screen
+      // scrubber still works.
       seekto: (event) => {
         if (typeof event.seekTime === "number") seek(event.seekTime);
       },
